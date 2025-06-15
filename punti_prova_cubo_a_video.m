@@ -1,15 +1,15 @@
 clear;
 clc;
 
-%% 创建多维数据集:
+%% Creating a Cube:
 
-% 顶点   a b c d e f g h
+% vertex   a b c d e f g h
 p3d =    [ 0 1 1 0 0 1 1 0 ;   % x 
            0 0 0 0 1 1 1 1 ;   % y
            0 0 1 1 1 1 0 0 ];  % z
 % p3d = p3d*500;     
        
-% 设置所有可见点       
+% Set all visible points      
 %hidden = zeros(1,8);
 connmatrix = [ 'r'  0   0   0   0   0   0   0  ;
                'g' 'k'  0   0   0   0   0   0  ;
@@ -88,7 +88,7 @@ for z=1:100
     %saveas(gcf,img);
     %cd ..;
     pause(0.03)
-    hold off; % on per traiettorie commentando linee cubo, off per il cubo
+    hold off; % on for trajectories commenting lines cube, off for the cube
 end
 
 hold off;

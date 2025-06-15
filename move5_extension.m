@@ -7,8 +7,8 @@ global pz
 aliveK=zeros(K,2);
 c=1;
 for k=1:K
-   for g=H-T:G % 考虑到滑动窗口
-      if tauexist(W_init,g,k) && ~isempty(W_init.track(g).tau(k).islast) % 如果航迹存在并且处于最后时刻, 并且航迹长度不等于1
+   for g=H-T:G % Taking into account the sliding window
+      if tauexist(W_init,g,k) && ~isempty(W_init.track(g).tau(k).islast) % f the track exists and is at the last moment, and the track length is not equal to 1
          aliveK(c,:)=[k g];
          c=c+1; 
          break;
@@ -16,7 +16,7 @@ for k=1:K
    end
 end
 
-if c==1 % 所有航迹都已经消亡
+if c==1 % All traces have disappeared
    Out=666;
    return
 end
@@ -24,7 +24,7 @@ a=randi(c-1);
 k2extend=aliveK(a,1);
 tfk2extend=aliveK(a,2);
 N2ext=W_init.track(tfk2extend).tau(k2extend).frame;
-% 以新生变换来实现
+% Implemented by new transformation
 Out = move1_birth(W_init,H,T,K,d_bar,v_bar,pz,k2extend,tfk2extend,N2ext);
 
 end

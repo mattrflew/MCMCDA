@@ -6,14 +6,17 @@ global Ts sigmaW sigmaV P0 A C Q R Y pz pd Tmax nt L_Birth L_False Nmc Hfinal d_
 Ts = 1; 
 sigmaW = 0.0002;%0.002;
 sigmaV = 0.0001;%0.001;
-P0 = 1000*eye(6); %P0 e X0 andranno inizializzate con le precedenti nel caso della sliding window
+P0 = 1000 * eye(6); % P0 and X0 must be initialized with previous values in case of sliding window
 
 L_Birth=0.000001;
 L_False=0.00001;
 
 Nmc = 30; 
 
-Hfinal=97;
+% Hfinal=97;
+Hfinal=5;
+
+
 
 Tmax=10;
 
@@ -41,14 +44,13 @@ pz = 0.01;
 %pdt = 0.99; % 
 
 
-%s = ceil(G); % numero di misure considerato
+%s = ceil(G); % number of measurements considered
 %pdt = 1-(1-pd)^s; 
 d_bar = 1;%= ceil( log(1-pdt)/log(1-pd) );%1
 
-%pz = 1/20; % probabilita' che scompaia il track
+%pz = 1/20; % probability that a track disappears
 
-v_bar = 0.15;%0.15; % cm/s, max directional speed  of any target, magari da basare con i vincoli di forma/ ricorsivamente
-
+v_bar = 0.15; % cm/s, max directional speed of any target — can be based on shape constraints / recursively
 
 
 for n=1:100
@@ -92,7 +94,7 @@ for h=1:Hfinal
    [nt(h),~] = size(Y(h).data);
 end
 
-% al primo passo di tutto (G=1,H=2) si presuppone che W sia gia' inizializzata:
+% At the very first step (G = 1, H = 2), W is assumed to be already initialized
 
 
 W.tracks=Ny;
@@ -119,6 +121,7 @@ for t=1:Hfinal
    disp('istante =');disp(W.frame);
    disp(' ');disp(' ');disp(' ');disp(' ');
    
+
 %    % set waitbar
 %    curTime = etime(clock, startTime);
 %    waitbar(curTime/testTime, h);

@@ -3,10 +3,16 @@ function [ P_acc ] = acceptancePw(pww, pwh)
 %   Calculates the acceptance probability of new feasible association set
 %   W0 given the previous accepted feasible solution set W0
 
-global mprev mcurr xsiprev xsicurr % bei pronti
+global mprev mcurr xsiprev xsicurr % bei pronti (nice and ready)
 
-qh=xsicurr(mcurr);
-qw=xsiprev(mprev);
+% % Matt
+% what does it mean for q to be empty?
+% Where are xsi defined?
+
+xsicurr
+qh=xsicurr(mcurr)
+qw=xsiprev(mprev)
+
 if isempty(qw)
     qh=1;
     qw=1;

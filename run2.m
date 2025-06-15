@@ -11,9 +11,12 @@ P0 = 1000*eye(6); %P0 e X0 andranno inizializzate con le precedenti nel caso del
 L_Birth=0.000001;
 L_False=0.001;
 
-Nmc = 30; % Numero di iterazioni per la costruzione della Proposal
+Nmc = 30; % Number of iterations to build the Proposal
 
-Hfinal=97;
+% Hfinal=97;
+
+Hfinal=5;
+
 
 Tmax=10;
 

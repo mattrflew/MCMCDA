@@ -1,9 +1,12 @@
 clear;
 clc;
+% punti: points
+% prova: test
 
-%% 创建多维数据集:
+%% 创建多维数据集: (Creating a Cube)
 
 % 顶点   a b c d e f g h
+% Vertex
 p3d =    [ 0 1 1 0 0 1 1 0 ;   % x 
            0 0 0 0 1 1 1 1 ;   % y
            0 0 1 1 1 1 0 0 ];  % z
@@ -11,6 +14,8 @@ p3d =    [ 0 1 1 0 0 1 1 0 ;   % x
        
 % 设置所有可见点       
 %hidden = zeros(1,8);
+
+% Connectivity matrix?
 connmatrix = [ 'r'  0   0   0   0   0   0   0  ;
                'g' 'k'  0   0   0   0   0   0  ;
                 0  'b' 'b'  0   0   0   0   0  ;
@@ -19,6 +24,8 @@ connmatrix = [ 'r'  0   0   0   0   0   0   0  ;
                 0   0  'b'  0  'b' 'b'  0   0  ;
                 0  'b'  0   0   0  'b' 'b'  0  ;
                'c'  0   0   0  'b'  0  'b' 'm' ];
+
+% Camera settings?
 kx=1;
 ky=1;
 

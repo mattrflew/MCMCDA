@@ -1,92 +1,85 @@
 function W_hat = multiscanMCMCDA(W_prev)
-% multiscanMCMCDA multi scan MCMCDA  tracking algorithm
+% multiscanMCMCDA multi-scan MCMCDA tracking algorithm
 %   centralized version
 
+global Y % from frame 1 to H (current)
+% Y = [Y1 ,..., YH] ó structure-matrix of all measurements up to the current time H,
+% each frame is a structure: Yi = struct('data', matrix_data)
+% each row of a normal matrix_data is a measurement [x y z]
+% Y(i).data(ai,:) is the ai-th 3D measurement at time i
 
-global Y % da frame 1 ad H (corrente)
-% Y = [Y1 ,..., YH] Y struttura-matrice di tutte le misure fino all'istante corrente H, 
-% ogni frame una struttura: Yi=struct('data', matrix_data)
-% ogni riga di una normale matrice matrix_data e' una misura [x y z]
-% Y(i).data(ai,:) e' l'ai-esima misura 3D dell'instante i
+global nt % here from frame 1 to H
 
-global nt % qui da frame 1 ad H
- 
-%[nt(H),~] = size(Y(H).data); % da frame 1 ad H, cresce ad ogni passo ma c'e' quadratino verde lo stesso..
+% [nt(H), ~] = size(Y(H).data); % from frame 1 to H, grows at each step but still shows green box...
 
-
-% W=struct('track', A, 'frame', H-1, 'tracks', K)
-% A = [w1 ,..., w{H-1}] matrice delle strutture delle associazioni di ogni instante
-% K e' il numero di tutte le track esistite o esistenti
+% W = struct('track', A, 'frame', H-1, 'tracks', K)
+% A = [w1 ,..., w{H-1}] ó array of association structures for each time step
+% K is the number of all tracks that have ever existed or currently exist
 %
-% w1 associa ad ogni misura un target
+% w1 associates each measurement with a target
 %
 % wt = struct('tau0', false_alarms, 'tau1', 1st_track, ..., 'frame', Hw)
 %
-% wt.tau0 = [ a1, .., aU] avendo aU falsi allarmi relativi a (..., Y(t).data(ai,:) ,... )
+% wt.tau0 = [a1, ..., aU] contains U false alarms corresponding to (..., Y(t).data(ai,:), ...)
 %
-% wt.taui = struct('y', bi,'frame', n, 'islast', [])  all'n-esimo frame del target i si associa la misura relativa a Y(t).data(bi,:) ,
-% islast e' un booleano che dice 1 se e' l'ultima misura del target i, altrimenti e' un campo vuoto
-% W.track(t).(tau(i)).y e' l'indice della misura bi corrispondente al track i all'istante t
-% si presuppone una sola possibile misura per target nel singolo istante (ipotesi di non ubiquita' del target)
-% una nuova track puo' non avere un campo associato negli istanti in cui non appare, 
-% oppure essere stata cancellata da un instante
+% wt.taui = struct('y', bi, 'frame', n, 'islast', []) 
+% associates the bi-th measurement Y(t).data(bi,:) to target i at frame n
+% islast is a boolean: 1 if this is the last measurement of target i, otherwise it's empty
+% W.track(t).(tau(i)).y is the index bi of the measurement associated with track i at time t
+% Assumes only one possible measurement per target at each time (non-ubiquity assumption)
+% A new track may not have an associated field in frames where it doesn't appear,
+% or it may have been deleted from a certain time step
 
-% al primo passo di tutto (W.frame = 1; H=2) si presuppone che W sia gia' inizializzata:
-% W.track(1).(tau(j)).y=Y(1).data(j,:);
-% W.track(1).(tau(j)).frame=1;
-% W.track(1).(tau(j)).islast=1;
-% W.track(1).tau0=[];
-% [Ny ~]=size(Y(1).data);
-% W.tracks=Ny;
-
-
+% At the very first step (W.frame = 1; H = 2), it is assumed that W is already initialized:
+% W.track(1).(tau(j)).y = Y(1).data(j,:);
+% W.track(1).(tau(j)).frame = 1;
+% W.track(1).(tau(j)).islast = 1;
+% W.track(1).tau0 = [];
+% [Ny ~] = size(Y(1).data);
+% W.tracks = Ny;
 
 % global Nmc
-% Nmc = Nmc + nt(H); % aggiornamento numero campioni, piu' veloce che fare sum(sum(Y)) ogni volta
+% Nmc = Nmc + nt(H); % update number of samples ó faster than computing sum(sum(Y)) every time
 
 global Nmc
 
-%W_hat=struct(); %%%%%%%%%%
-
+% W_hat = struct(); %%%%%%%%%%
 
 W_init = W_prev;
 W_W = W_init;
 W_hat = W_init;
-for n=1:Nmc
-% 	propose w_prop based on w_prev
-	W_primo = proposal_distribution(W_hat);
-	U=rand;
-    %  «∑Ò”–Œ Ã‚£øX.W.Cui,2020-3-26.
+for n = 1:Nmc
+    % propose w_prop based on w_prev
+    W_primo = proposal_distribution(W_hat);
+    U = rand;
+    % Any issues? ó X.W.Cui, 2020-3-26.
     pww = PW_Y(W_W); 
     pwp = PW_Y(W_primo);
 %     pwh = PW_Y(W_hat);
-%     acc=acceptancePw(pww, pwh);
-    acc=acceptancePw(pww, pwp);
-   
-	if U<acc  % se sotto la proprieta' di accettazione 
+%     acc = acceptancePw(pww, pwh);
+    acc = acceptancePw(pww, pwp);
+
+    if U < acc  % under acceptance probability
         W_W = W_primo;
         pww = PW_Y(W_W);
         disp('ACCEPT');
-   end    
-   
+    end    
 
-    msg=strcat('U = ',num2str(U),' acc = ',' ',num2str(acc),'; pww = ',' ',num2str(pww), ', pwp = ',' ',num2str(pwp));
+    msg = strcat('U = ', num2str(U), ' acc = ', ' ', num2str(acc), '; pww = ', ' ', num2str(pww), ', pwp = ', ' ', num2str(pwp));
     disp(msg);
+    
     pwh = PW_Y(W_hat);
-	if pww>pwh % se w_w piu' probabile di w_hat
+    if pww > pwh % if w_w is more probable than w_hat
         W_hat = W_W;
         disp('                                                        PASSPROB');
-	end 
-	    
-    msg=strcat('istante = ',' ',num2str(W_prev.frame),', iterazione = ',' ',num2str(n));
+    end 
+
+    msg = strcat('time step = ', ' ', num2str(W_prev.frame), ', iteration = ', ' ', num2str(n));
     disp(msg);
     disp(' ');
 end
 
-
-
-
-W_hat.frame = W_hat.frame + 1; % questo perche' si sta proponendo la W fino alle Y correnti (istante H)
+W_hat.frame = W_hat.frame + 1; % this is because W is being proposed up to the current Y (time H)
 
 % function end
 end

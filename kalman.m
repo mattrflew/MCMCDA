@@ -8,7 +8,7 @@ global P0 A C Q R
 %     Ts = 1; 
 %     sigmaW = 0.02;
 %     sigmaV = 0.01;
-%     P0 = 100*ones(6,6); %P0 e X0 andranno inizializzate con le precedenti nel caso della sliding window
+%     P0 = 100*ones(6,6); P0 and X0 will be initialized with the previous ones in the case of the sliding window
 %     
 %     A = [1 Ts 0 0  0 0;
 %          0  1 0 0  0 0;
@@ -36,7 +36,7 @@ global P0 A C Q R
            
             
             % update
-            % measure = Y(cont).data(Tau(cont) , :); %estraggo da tutte le misure la misura al tempo T relativo            
+            % measure = Y(cont).data(Tau(cont) , :); %I extract from all the measurements the measurement at the relative time T      
             
             K = P * ((C')/(C*P*C' + R));
             xhat(:,cont) = xhat(:,cont) + K * (y(cont,:)' - C*xhat(:,cont));

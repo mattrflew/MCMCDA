@@ -6,6 +6,8 @@ clc;
 %{
 Scripts takes the points created in punti_prova.m and shows the true
 trajectories.
+
+Redoing the code that was in the punti_prova_cubo_a_video.m script.
 %}
 
 

@@ -3,6 +3,8 @@ clc;
 punti_random_walk;
 load('movimento_punti_random_100frames');
 global Ts sigmaW sigmaV P0 A C Q R Y pz pd Tmax nt L_Birth L_False Nmc Hfinal d_bar v_bar randomw
+
+
 Ts = 1; 
 sigmaW = 0.02;%0.002;
 sigmaV = 0.01;%0.001;
@@ -143,4 +145,3 @@ plotW(W,Y);
 
 msg=strcat('simulazione_',datestr(now,1),'_',datestr(now,'HH'),'-',datestr(now,'MM'),'-',datestr(now,'SS'));
 save(msg);
-

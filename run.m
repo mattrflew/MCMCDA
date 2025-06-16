@@ -2,6 +2,8 @@ clear;
 clc;
 punti_prova;
 load('movimento_punti_3D_100frames');
+
+
 global Ts sigmaW sigmaV P0 A C Q R Y pz pd Tmax nt L_Birth L_False Nmc Hfinal d_bar v_bar
 Ts = 1; 
 sigmaW = 0.0002;%0.002;

@@ -1,6 +1,12 @@
 clear;
 clc;
 
+% test_points_cube_on_video.m
+
+%{
+Plots the cube's trajectory through space
+Also creates the movimento_punti_3D_100frames.mat test data
+%}
 
 %% Creating a Cube:
 

@@ -1,6 +1,7 @@
 clear;
 clc;
 
+
 %% Creating a Cube:
 
 % vertex   a b c d e f g h
@@ -93,6 +94,10 @@ end
 
 hold off;
 save('movimento_punti_3D_100frames','points');
+
+
+
+
 
 % [P2D, hidden] = camera_simulation(eye(3), [-0.5 -0.5 5]', p3d, K, f);
 
